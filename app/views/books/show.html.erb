@@ -6,8 +6,10 @@
       <h2 class="mt-3">New book</h2>
       <%= render 'form', book: Book.new %>
     </div>
+
     <div class='col-md-8 offset-md-1'>
   		<h2>Book detail</h2>
+
   		<table class='table'>
   		  <tr>
           <td><%= link_to(@book.user) do %>
@@ -30,12 +32,35 @@
               <% end %>
             </td>
           <% end %>
+          <td>
+          <%= "#{@book.book_comments.count}件のコメント" %>
+          </td>
           <% if @user == current_user %>
             <td><%= link_to 'Edit', edit_book_path(@book), class: "btn btn-sm btn-success" %></td>
             <td><%= link_to 'Destroy', book_path(@book.id), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%></td>
           <% end %>
         </tr>
+        <% @book.book_comments.each do |book_comment| %>
+        <tr>
+          <td>
+            <%= image_tag book_comment.user.get_profile_image, size:"50x50" %><br>
+              <%= book_comment.user.name %>
+          </td>
+          <td>
+            <%= book_comment.comment %>
+          </td>
+            <% if book_comment.user_id == current_user.id %>
+            <td><%= link_to 'Destroy', book_book_comment_path(book_comment.book, book_comment), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%></td>
+            <% end %>
+          <% end %>
+        </tr>
       </table>
+      <div>
+        <%= form_with model: [@book,@book_comment] do |f| %>
+        <%= f.text_area :comment %>
+        <%= f.submit "comment" %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
