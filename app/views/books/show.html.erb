@@ -36,7 +36,7 @@
       </table>
       <div>
         <%= form_with model: [@book,@book_comment], local: false do |f| %>
-        <%= f.text_area :comment, id: "comment-area" %>
+        <%= f.text_area :comment %>
         <%= f.submit "comment" %>
         <% end %>
       </div>
