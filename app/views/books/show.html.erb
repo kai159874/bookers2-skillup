@@ -22,7 +22,7 @@
           <td id="favorite-btn-<%= @book.id %>">
             <%= render "favorites/favorite-btn", book: @book %>
           </td>
-          <td>
+          <td id="comments-count">
           <%= "#{@book.book_comments.count}件のコメント" %>
           </td>
           <% if @user == current_user %>
@@ -30,24 +30,13 @@
             <td><%= link_to 'Destroy', book_path(@book.id), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%></td>
           <% end %>
         </tr>
-        <% @book.book_comments.each do |book_comment| %>
-        <tr>
-          <td>
-            <%= image_tag book_comment.user.get_profile_image, size:"50x50" %><br>
-              <%= book_comment.user.name %>
-          </td>
-          <td>
-            <%= book_comment.comment %>
-          </td>
-            <% if book_comment.user_id == current_user.id %>
-            <td><%= link_to 'Destroy', book_book_comment_path(book_comment.book, book_comment), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger"%></td>
-            <% end %>
-          <% end %>
-        </tr>
+        <table id="comments-<%= @book.id %>">
+          <%= render "book_comments/comments", book: @book %>
+        </table>
       </table>
       <div>
-        <%= form_with model: [@book,@book_comment] do |f| %>
-        <%= f.text_area :comment %>
+        <%= form_with model: [@book,@book_comment], local: false do |f| %>
+        <%= f.text_area :comment, id: "comment-area" %>
         <%= f.submit "comment" %>
         <% end %>
       </div>
